@@ -22,7 +22,8 @@ func main() {
 	defer out.Flush()
 
 	var countNumbers int
-	fmt.Fscan(in, &countNumbers)
+	//fmt.Fscan(in, &countNumbers)
+	fmt.Fscanf(in, "%d\n", &countNumbers)
 
 	if countNumbers < 1 || countNumbers > int(math.Pow(base, exponent)) {
 		fmt.Fprintln(out, "Error input, number less 0 or more 10^5")
@@ -50,7 +51,7 @@ func inputNumbers(countNumbers int) []big.Int {
 	numbers := make([]big.Int, countNumbers)
 
 	for i := 0; i < countNumbers; i++ {
-		_, err := fmt.Fscan(in, &numbers[i])
+		_, err := fmt.Fscanf(in, "%d\n", &numbers[i])
 		if err != nil {
 			fmt.Fprintln(out, err)
 			return nil
@@ -73,6 +74,29 @@ func inputNumbers(countNumbers int) []big.Int {
 	}
 	return numbers
 }
+
+//func inputNumbers2(countNumbers int) []big.Int {
+//	//numbers := make([]int, countNumbers)
+//	numbers := make([]big.Int, countNumbers)
+//
+//	for i := 0; i < countNumbers; i++ {
+//		_, err := fmt.Fscanf(in, "%d\n", &numbers[i])
+//		if err != nil {
+//			fmt.Fprintln(out, err)
+//			break
+//		}
+//	}
+//
+//	ten := big.NewInt(10)
+//	for i := 0; i < countNumbers; i++ {
+//		temp := new(big.Int).Set(&numbers[i])
+//		temp.Div(temp, ten)
+//
+//		numbers[i] = *temp
+//	}
+//
+//	return numbers
+//}
 
 func splitNumberIntoDigits(n *big.Int) []int {
 	temp := new(big.Int).Set(n)
@@ -98,9 +122,9 @@ func assembleNumberFromDigits(digits []int) *big.Int {
 	result := big.NewInt(0)
 	ten := big.NewInt(10)
 
-	for _, digit := range digits {
+	for i := 0; i < len(digits); i++ {
 		result.Mul(result, ten)
-		result.Add(result, big.NewInt(int64(digit)))
+		result.Add(result, big.NewInt(int64(digits[i])))
 	}
 
 	return result
