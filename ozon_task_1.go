@@ -91,10 +91,6 @@ func splitNumberIntoDigits(n *big.Int) []int {
 		digits = append([]int{int(remainder.Int64())}, digits...)
 	}
 
-	if len(digits) == 0 {
-		digits = append(digits, 0)
-	}
-
 	return digits
 }
 
@@ -111,15 +107,16 @@ func assembleNumberFromDigits(digits []int) *big.Int {
 }
 
 func removeLessDigit(numberByDigits []int) []int {
-	if len(numberByDigits) == 0 {
+	if len(numberByDigits) <= 1 {
 		arr := []int{0}
 		return arr
 	}
 
-	minIndex := 0
-	for i := 1; i < len(numberByDigits); i++ {
-		if numberByDigits[i] < numberByDigits[minIndex] {
+	minIndex := len(numberByDigits) - 1
+	for i := 0; i < len(numberByDigits)-1; i++ {
+		if numberByDigits[i] < numberByDigits[i+1] {
 			minIndex = i
+			break
 		}
 	}
 
