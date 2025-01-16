@@ -6,7 +6,7 @@ import (
 	"math"
 	"math/big"
 	"os"
-	"time"
+	//"time"
 )
 
 var in *bufio.Reader
@@ -15,8 +15,8 @@ var out *bufio.Writer
 const base = 10.0
 const exponent = 5.0
 
-func main2() {
-	start := time.Now()
+func main() {
+	//start := time.Now()
 	in = bufio.NewReader(os.Stdin)
 	out = bufio.NewWriter(os.Stdout)
 	defer out.Flush()
@@ -40,14 +40,12 @@ func main2() {
 		}
 	}
 
-	duration := time.Since(start)
-	fmt.Printf("Время выполнения: %d мс\n", duration.Milliseconds())
+	//duration := time.Since(start)
+	//fmt.Printf("Время выполнения: %d мс\n", duration.Milliseconds())
 	//fmt.Fprintln(out, inputNumbers+inputNumbers)
 }
 
 func inputNumbers(countNumbers int) []big.Int {
-	in = bufio.NewReader(os.Stdin)
-
 	//numbers := make([]int, countNumbers)
 	numbers := make([]big.Int, countNumbers)
 
@@ -59,10 +57,16 @@ func inputNumbers(countNumbers int) []big.Int {
 		}
 		numberByDigits := splitNumberIntoDigits(&numbers[i])
 
-		if len(numberByDigits) <= 0 || len(numberByDigits) > int(math.Pow(base, exponent)) {
-			fmt.Fprintln(out, "Numbel size less 0 or more 10^5")
-			return nil
+		if len(numberByDigits) <= 0 {
+			continue
 		}
+		if len(numberByDigits) > int(math.Pow(base, exponent)) {
+			continue
+		}
+		//if len(numberByDigits) <= 0 || len(numberByDigits) > int(math.Pow(base, exponent)) {
+		//	fmt.Fprintln(out, "Numbel size less 0 or more 10^5")
+		//	continue
+		//}
 		numberByDigits = removeLessDigit(numberByDigits)
 
 		numbers[i] = *assembleNumberFromDigits(numberByDigits)
@@ -107,8 +111,9 @@ func assembleNumberFromDigits(digits []int) *big.Int {
 }
 
 func removeLessDigit(numberByDigits []int) []int {
-	if len(numberByDigits) <= 1 {
-		return numberByDigits
+	if len(numberByDigits) == 0 {
+		arr := []int{0}
+		return arr
 	}
 
 	minIndex := 0

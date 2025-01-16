@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main() {
+func main4() {
 	var in *bufio.Reader
 	var out *bufio.Writer
 
