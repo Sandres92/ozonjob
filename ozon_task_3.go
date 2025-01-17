@@ -9,16 +9,13 @@ import (
 	"strings"
 )
 
-var in *bufio.Reader
-var out *bufio.Writer
-
 type Directory struct {
 	Dir     string      `json:"dir"`
 	Files   []string    `json:"files"`
 	Folders []Directory `json:"folders"`
 }
 
-func main() {
+func main3() {
 	//start := time.Now()
 	in = bufio.NewReader(os.Stdin)
 	out = bufio.NewWriter(os.Stdout)

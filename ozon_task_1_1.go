@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func main3() {
+func main_1_1() {
 
 	var in *bufio.Reader
 	var out *bufio.Writer
