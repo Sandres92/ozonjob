@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"os"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -20,9 +20,6 @@ func main() {
 	defer out.Flush()
 
 	//fmt.Fscan(in, &countNumbers)
-
-	number := int(math.Pow(10.0, 3.0))
-	fmt.Fprintln(out, number)
 
 	var countNumbers int
 	fmt.Fscanf(in, "%d\n", &countNumbers)
@@ -50,28 +47,25 @@ func inputDataSet(countDataSets int) []string {
 		firstString = strings.TrimSpace(firstString)
 
 		secondString, _ = in.ReadString('\n')
-		secondString = strings.TrimSpace(secondString)
+		secondString = strings.TrimRight(secondString, "\r\n")
 
 		_, err := strconv.Atoi(zeroString)
 
 		if err != nil {
-			fmt.Fprintln(out, "1111")
 			results[i] = "no"
 		} else if results[i] == "yes" {
-			isDigit := func(c rune) bool { return (c >= '0' && c <= '9') || c == '_' || c == ' ' }
+			re := regexp.MustCompile("[0-9]+$")
 
-			fmt.Fprintln(out, "2222")
-			fmt.Fprintln(out, isDigit)
-
-			if !strings.ContainsFunc(firstString, isDigit) || !strings.ContainsFunc(secondString, isDigit) {
+			if len(firstString) != len(secondString) {
 				results[i] = "no"
-				fmt.Fprintln(out, "3333")
-			}
-			resultsStr := workOutString(firstString)
-
-			if resultsStr != secondString {
+			} else if !re.MatchString(firstString) || !re.MatchString(secondString) {
 				results[i] = "no"
-				fmt.Fprintln(out, "4444")
+			} else {
+				resultsStr := workOutString(firstString)
+
+				if resultsStr != secondString {
+					results[i] = "no"
+				}
 			}
 		}
 	}
@@ -80,35 +74,25 @@ func inputDataSet(countDataSets int) []string {
 }
 
 func workOutString(inputStr string) string {
-	resultStr := ""
 	strs := strings.Split(inputStr, " ")
-
 	numbers := make([]int, len(strs))
 
 	for i := 0; i < len(numbers); i++ {
-		num, err := strconv.Atoi(strs[i])
-		if err != nil {
-			fmt.Fprintln(out, "error not number")
-			fmt.Fprintln(out, inputStr)
-			fmt.Fprintln(out, i)
-			fmt.Fprintln(out, "end error")
-			break
-		}
-
+		num, _ := strconv.Atoi(strs[i])
 		numbers[i] = num
 	}
 
-	var emptyArr []int
-	copy(emptyArr, numbers)
-	sort.Ints(emptyArr)
+	sort.Ints(numbers)
 
-	for i := 0; i < len(emptyArr)-1; i++ {
-		str := strconv.Itoa(emptyArr[i])
+	var resultStr strings.Builder
+	for i := 0; i < len(numbers)-1; i++ {
+		str := strconv.Itoa(numbers[i])
 
-		resultStr += str + " "
+		resultStr.WriteString(str)
+		resultStr.WriteString(" ")
 	}
 
-	resultStr += strconv.Itoa(emptyArr[len(emptyArr)-1])
+	resultStr.WriteString(strconv.Itoa(numbers[len(numbers)-1]))
 
-	return resultStr
+	return resultStr.String()
 }
