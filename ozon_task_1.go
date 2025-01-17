@@ -11,7 +11,7 @@ import (
 const base = 10.0
 const exponent = 5.0
 
-func main2() {
+func main1() {
 	//start := time.Now()
 	in = bufio.NewReader(os.Stdin)
 	out = bufio.NewWriter(os.Stdout)

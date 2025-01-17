@@ -10,10 +10,7 @@ import (
 	"strings"
 )
 
-var in *bufio.Reader
-var out *bufio.Writer
-
-func main() {
+func main2() {
 	//start := time.Now()
 	in = bufio.NewReader(os.Stdin)
 	out = bufio.NewWriter(os.Stdout)
@@ -21,10 +18,10 @@ func main() {
 
 	//fmt.Fscan(in, &countNumbers)
 
-	var countNumbers int
-	fmt.Fscanf(in, "%d\n", &countNumbers)
+	var countDataSets int
+	fmt.Fscanf(in, "%d\n", &countDataSets)
 
-	resultsArr := inputDataSet(countNumbers)
+	resultsArr := inputDataSet(countDataSets)
 
 	for i := 0; i < len(resultsArr); i++ {
 		fmt.Fprintln(out, resultsArr[i])
