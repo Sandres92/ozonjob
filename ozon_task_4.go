@@ -19,10 +19,7 @@ type Truck struct {
 	capacity int
 }
 
-var in *bufio.Reader
-var out *bufio.Writer
-
-func main() {
+func main4() {
 	in = bufio.NewReader(os.Stdin)
 	out = bufio.NewWriter(os.Stdout)
 	defer out.Flush()
