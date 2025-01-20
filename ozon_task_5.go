@@ -10,10 +10,7 @@ type Point struct {
 	x, y int
 }
 
-var in *bufio.Reader
-var out *bufio.Writer
-
-func main() {
+func main5() {
 	in = bufio.NewReader(os.Stdin)
 	out = bufio.NewWriter(os.Stdout)
 	defer out.Flush()

@@ -3,15 +3,14 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"math/big"
 	"os"
 )
 
-const base = 10.0
-const exponent = 5.0
+var in *bufio.Reader
+var out *bufio.Writer
 
-func main1() {
+func main() {
 	//start := time.Now()
 	in = bufio.NewReader(os.Stdin)
 	out = bufio.NewWriter(os.Stdout)
@@ -21,77 +20,25 @@ func main1() {
 	//fmt.Fscan(in, &countNumbers)
 	fmt.Fscanf(in, "%d\n", &countNumbers)
 
-	if countNumbers < 1 || countNumbers > int(math.Pow(base, exponent)) {
-		fmt.Fprintln(out, "Error input, number less 0 or more 10^5")
-		return
-	}
-
 	//fmt.Fprintln(out, "====")
-	inputNumbers3(countNumbers)
+	//inputNumbers3(countNumbers)
+	inputNumbers2(countNumbers)
 
 	//duration := time.Since(start)
 	//fmt.Printf("Время выполнения: %d мс\n", duration.Milliseconds())
 	//fmt.Fprintln(out, inputNumbers+inputNumbers)
 }
 
-func inputNumbers(countNumbers int) {
-	//numbers := make([]int, countNumbers)
-	numbers := make([]big.Int, countNumbers)
-
-	for i := 0; i < countNumbers; i++ {
-		_, err := fmt.Fscanf(in, "%d\n", &numbers[i])
-		if err != nil {
-			fmt.Fprintln(out, err)
-			break
-		}
-		numberByDigits := splitNumberIntoDigits(&numbers[i])
-
-		if len(numberByDigits) <= 0 {
-			continue
-		}
-		if len(numberByDigits) > int(math.Pow(base, exponent)) {
-			continue
-		}
-		//if len(numberByDigits) <= 0 || len(numberByDigits) > int(math.Pow(base, exponent)) {
-		//	fmt.Fprintln(out, "Numbel size less 0 or more 10^5")
-		//	continue
-		//}
-		numberByDigits = removeLessDigit(numberByDigits)
-
-		numbersTemp := *assembleNumberFromDigits(numberByDigits)
-
-		fmt.Fprintln(out, &numbersTemp)
-	}
-}
-
 func inputNumbers2(countNumbers int) {
 	numbers := make([]string, countNumbers)
 
 	for i := 0; i < countNumbers; i++ {
-		_, err := fmt.Fscan(in, &numbers[i])
-		if err != nil {
-			fmt.Fprintln(out, err)
-			break
-		}
-		//numberByDigits := splitNumberIntoDigits(&numbers[i])
-		//
-		//if len(numberByDigits) <= 0 {
-		//	continue
-		//}
-		//if len(numberByDigits) > int(math.Pow(base, exponent)) {
-		//	continue
-		//}
-		////if len(numberByDigits) <= 0 || len(numberByDigits) > int(math.Pow(base, exponent)) {
-		////	fmt.Fprintln(out, "Numbel size less 0 or more 10^5")
-		////	continue
-		////}
-		//numberByDigits = removeLessDigit(numberByDigits)
-		//
-		//numbers[i] = *assembleNumberFromDigits(numberByDigits)
-
-		str := createMostBigestNumber(numbers[i])
-
-		fmt.Fprintln(out, str)
+		var str string
+		fmt.Fscan(in, &str)
+		numbers[i] = createMostBigestNumber3(str)
+	}
+	for i := 0; i < countNumbers; i++ {
+		fmt.Fprintln(out, numbers[i])
 	}
 }
 
@@ -279,10 +226,6 @@ func createMostBigestNumber(numberString string) string {
 	minIndex := len(numberString) - 1
 
 	for i := 0; i < len(numberString)-1; i++ {
-
-		//number_left, _ := strconv.Atoi(string(numberString[i]))
-		//number_right, _ := strconv.Atoi(string(numberString[i+1]))
-
 		if numberString[i] < numberString[i+1] {
 			minIndex = i
 			break
@@ -294,22 +237,22 @@ func createMostBigestNumber(numberString string) string {
 	return result3
 }
 
-func createMostBigestNumber2(number string) string {
-	// Длина числа
-	n := len(number)
+func createMostBigestNumber3(numberString string) string {
+	lenString := len(numberString)
+	if lenString <= 1 {
+		return "0"
+	}
 
-	// Ищем первую цифру, которая меньше следующей
-	for i := 0; i < n-1; i++ {
-		if number[i] < number[i+1] {
-			// Удаляем текущую цифру и возвращаем результат
-			return number[:i] + number[i+1:]
+	minIndex := lenString - 1
+	for i := 1; i < lenString-1; i += 2 {
+		if numberString[i-1] < numberString[i] {
+			minIndex = i - 1
+			break
+		} else if i+1 < lenString && numberString[i] < numberString[i+1] {
+			minIndex = i
+			break
 		}
 	}
 
-	// Если не нашли, удаляем последнюю цифру
-	return number[:n-1]
-}
-
-func doNothing(numberByDigits []int) {
-
+	return numberString[0:minIndex] + numberString[minIndex+1:]
 }
