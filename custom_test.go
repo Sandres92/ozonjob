@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 func Test_ValidateOutput(t *testing.T) {
@@ -18,8 +18,6 @@ func Test_ValidateOutput(t *testing.T) {
 
 	var in *os.File
 	var exp string
-
-	fmt.Println(len(entries))
 
 	for _, e := range entries {
 		if strings.Contains(e.Name(), ".test.") {
@@ -45,7 +43,10 @@ func Test_ValidateOutput(t *testing.T) {
 			os.Stdin = in
 			os.Stdout = out2
 
+			start := time.Now()
 			main()
+			duration := time.Since(start)
+			t.Logf("time = %d\n", duration.Milliseconds())
 			//cmd := exec.Command("go", "run", "../ozon_task/ozon_task_1.go")
 
 			in.Close()
