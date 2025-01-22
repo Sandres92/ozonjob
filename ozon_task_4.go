@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"time"
 )
 
 type Arrivals struct {
@@ -26,11 +27,14 @@ func main4() {
 
 	var countDataSets4 int
 	fmt.Fscanf(in, "%d\n", &countDataSets4)
-
+	start := time.Now()
 	//inputDataSets4(countDataSets4)
 	result := inputDataSets(countDataSets4)
 	//tsetOne()
+	duration := time.Since(start)
+	fmt.Fprintf(out, "all input and calc = %d\n", duration.Milliseconds())
 
+	start = time.Now()
 	for _, arr := range result {
 		for i := 0; i < len(arr)-1; i++ {
 			fmt.Fprintf(out, "%d ", arr[i])
@@ -38,6 +42,8 @@ func main4() {
 		fmt.Fprintln(out, arr[len(arr)-1])
 	}
 
+	duration = time.Since(start)
+	fmt.Fprintf(out, "output = %d\n", duration.Milliseconds())
 	//testInput()
 	//testFor4()
 
@@ -59,8 +65,16 @@ func inputDataSets(countDataSets4 int) [][]int {
 	var resultsAll [][]int = make([][]int, countDataSets4)
 
 	for i := 0; i < countDataSets4; i++ {
+		start := time.Now()
+
 		arrivals, tracks := inputOneDataSets()
+		duration := time.Since(start)
+		fmt.Fprintf(out, "%d input = %d\n", i, duration.Nanoseconds())
+
+		start = time.Now()
 		resultsAll[i] = calculatePlanner(arrivals, tracks)
+		duration = time.Since(start)
+		fmt.Fprintf(out, "%d calc = %d\n", i, duration.Nanoseconds())
 	}
 
 	return resultsAll
@@ -76,11 +90,11 @@ func inputOneDataSets() ([]Arrivals, []Truck) {
 	//fmt.Fprintln(out, arrivalsNumbers)
 
 	arrivals := make([]Arrivals, arrivalsNumbers)
-	arrivalsIndexes := make([]int, arrivalsNumbers)
+	//arrivalsIndexes := make([]int, arrivalsNumbers)
 	for i := 0; i < arrivalsNumbers; i++ {
-		fmt.Fscanf(in, "%d", &arrivals[i].arrival)
-		arrivalsIndexes[i] = i
 		arrivals[i].index = i
+		fmt.Fscanf(in, "%d", &arrivals[i].arrival)
+		//arrivalsIndexes[i] = i
 	}
 
 	in.ReadString('\n') // Очищаем остатки строки после массива
@@ -97,16 +111,18 @@ func inputOneDataSets() ([]Arrivals, []Truck) {
 	trucks := make([]Truck, trucksNumbers)
 
 	for i := 0; i < trucksNumbers; i++ {
-		truckOne := make([]int, 3)
-		for j := 0; j < 3; j++ {
-			fmt.Fscanf(in, "%d", &truckOne[j])
-		}
-		in.ReadString('\n')
+		//truckOne := make([]int, 3)
+		//for j := 0; j < 3; j++ {
+		//}
 
 		trucks[i].index = i
-		trucks[i].start = truckOne[0]
-		trucks[i].end = truckOne[1]
-		trucks[i].capacity = truckOne[2]
+
+		fmt.Fscanf(in, "%d %d %d", &trucks[i].start, &trucks[i].end, &trucks[i].capacity)
+		in.ReadString('\n')
+
+		//trucks[i].start = truckOne[0]
+		//trucks[i].end = truckOne[1]
+		//trucks[i].capacity = truckOne[2]
 	}
 
 	return arrivals, trucks
@@ -140,9 +156,6 @@ func calculatePlanner(arrivals []Arrivals, trucks []Truck) []int {
 	for j := 0; j < len(trucks); j++ {
 
 		for i := currcntArrivalIndex; i < len(arrivals); i++ {
-
-			//fmt.Fprintf(out, "track = %d, arrival = %d \n", j, i)
-			//fmt.Fprintf(out, "currcntArrivalIndex  %d , %d , %t\n", arrivals[i].arrival, trucks[j].start, arrivals[i].arrival >= trucks[j].start)
 
 			if arrivals[i].arrival < trucks[j].start {
 				currcntArrivalIndex++
